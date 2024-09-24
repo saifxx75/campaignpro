@@ -1,24 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import Header from './components/Header';
+import Home from "./pages/Home";
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Footer from './components/Footer';
 
 function App() {
+  const location = useLocation();
+
+  const hideHeaderFooterRoutes = ["/logIn", "/register"];
+  const shouldHideHeaderFooter = hideHeaderFooterRoutes.includes(location.pathname);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {!shouldHideHeaderFooter && <Header />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        {/* other routes */}
+      </Routes>
+      {/* Conditionally render Footer based on current route */}
+      {!shouldHideHeaderFooter && <Footer />}
+      </>
   );
 }
 
