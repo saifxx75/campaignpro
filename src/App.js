@@ -25,7 +25,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         {/* other routes */}
       </Routes>
-      {/* Conditionally render Footer based on current route */}
       {!shouldHideHeaderFooter && <Footer />}
       </>
   );

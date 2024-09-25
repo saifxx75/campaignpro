@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import logo from './logowithname.svg'
 
 const Footer = () => {
   return (
@@ -10,8 +11,8 @@ const Footer = () => {
           <Col md={6} className="text-md-start text-center mb-3 mb-md-0">
             {/* Replace the text with an image if you have a logo image */}
             <div className="logo">
-              <Link to="/" className="text-black logo-text" style={{ textDecoration: 'none' }}>
-                CampaignPro
+              <Link to="/" className="text-black logo-text">
+              <img src={logo}/>
               </Link>
             </div>
           </Col>
