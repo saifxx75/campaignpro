@@ -1,0 +1,19 @@
+.heading{
+    color: #007BFD;
+    margin-left: 1px;
+    /* display: flex; */
+}
+.service{
+    height: 100%;
+    margin: 0px;
+    flex-grow: 1;
+    margin-left: 220px;
+    margin-right: 150px;
+    flex-direction: column;
+    justify-content: start;
+    align-items: left;
+    text-align: left;
+    display: flex;
+    max-width: 67rem;
+    overflow: auto;
+}
