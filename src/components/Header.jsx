@@ -14,7 +14,7 @@ const Header = () => {
           <Nav className="ms-auto gap-4">
             {/* <Nav.Link as={Link} to="/about">About</Nav.Link> */}
             <Nav.Link as={Link} to="/contact" className='mt-2px'>Contact Us</Nav.Link>
-            <Nav.Link as={Link} to="/login">Login</Nav.Link>
+            <Nav.Link as={Link} to="/logIn">Login</Nav.Link>
             <Nav.Link as={Link} to="/register"><button className='signup-btn'>Start For Free</button></Nav.Link>
           </Nav>
         </Navbar.Collapse>

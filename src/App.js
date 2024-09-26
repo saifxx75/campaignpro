@@ -26,7 +26,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/logIn" element={<Login />} />
         <Route path="/terms-of-services" element={<TermOfServices/>} />
         <Route path='/privacy-policy' element={<PrivacyPolicy/>}/>
         <Route path='/dashboard' element={<MainLayout> <Dashboard/> </MainLayout>} />
