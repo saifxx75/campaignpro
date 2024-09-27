@@ -89,7 +89,7 @@ export default function Login() {
             </Form>
             <p className="text-center mt-4">OR</p>
             <p className="text-center">
-              Don&apos;t have an account? <a href="/register">Sign Up</a>
+              Don&apos;t have an account? <a className="text-decoration-none" href="/register">Sign Up</a>
             </p>
           </Col>
         </Row>

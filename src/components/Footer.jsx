@@ -25,7 +25,7 @@ const Footer = () => {
                 <Link to="/privacy-policy" className="text-dark">Privacy Policy</Link>
               </li>
               <li className="ms-3">
-                <Link to="/services" className="text-dark">Service</Link>
+                <Link to="/cancellations" className="text-dark">Cancellations</Link>
               </li>
               <li className="ms-3">
                 <Link to="/support" className="text-dark">Support</Link>

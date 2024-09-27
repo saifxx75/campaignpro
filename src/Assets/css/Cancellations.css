@@ -1,0 +1,10 @@
+.heading{
+    color: #007BFD;
+}
+.cancellation{
+    margin-left: 220px;
+    margin-right: 150px;
+    flex-direction: column;
+    display: flex;
+    margin-bottom: 60px;
+}

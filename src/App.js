@@ -11,6 +11,9 @@ import TermOfServices from './pages/TermOfServices';
 import Dashboard from './pages/Dashboard'
 import MainLayout from './components/MainLayout';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import ScrollToTop from './components/ScrollToTop';
+import Cancellations from './pages/Cancellations';
+import Support from './pages/Support';
 
 function App() {
   const location = useLocation();
@@ -21,6 +24,7 @@ function App() {
   return (
     <>
       {!shouldHideHeaderFooter && <Header />}
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -29,6 +33,8 @@ function App() {
         <Route path="/logIn" element={<Login />} />
         <Route path="/terms-of-services" element={<TermOfServices/>} />
         <Route path='/privacy-policy' element={<PrivacyPolicy/>}/>
+        <Route path='cancellations' element={<Cancellations />}/>
+        <Route path='/support' element={<Support />} />
         <Route path='/dashboard' element={<MainLayout> <Dashboard/> </MainLayout>} />
         {/* other routes */}
       </Routes>

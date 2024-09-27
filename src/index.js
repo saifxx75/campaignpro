@@ -10,7 +10,7 @@ import 'bootstrap/dist/js/bootstrap.js'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <App />
+    <App  className="justify-content-start"/>
   </BrowserRouter>,
 );
 

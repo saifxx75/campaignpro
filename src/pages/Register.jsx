@@ -34,7 +34,7 @@ function Register() {
   return (
     <Container
       fluid
-      className="d-flex align-items-center justify-content-center vh-70" // Vertically and horizontally center
+      className="d-flex align-items-center justify-content-center vh-70 mt-4" // Vertically and horizontally center
       style={{ overflowY: "auto" }} // Ensures scrollability
     >
       <Row className="justify-content-center w-100">
@@ -99,7 +99,7 @@ function Register() {
           <div className="text-center mt-3">
             <p>OR</p>
             <p>
-              Already registered? <a href="/logIn">Sign In</a>
+              Already registered? <a className="text-decoration-none" href="/logIn">Sign In</a>
             </p>
           </div>
         </Col>
