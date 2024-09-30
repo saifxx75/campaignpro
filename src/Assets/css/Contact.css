@@ -1,0 +1,39 @@
+h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .heading{
+    color: #007BFD;
+  }
+  p {
+    font-size: 1.2rem;
+  }
+  
+  a {
+    color: #007BFD;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  form {
+    background-color: #f9f9f9;
+  }
+  
+  form .form-control {
+    border-radius: 4px;
+    box-shadow: none;
+  }
+  
+  form .btn-primary {
+    background-color: #007BFD;
+    border-color: #007BFD;
+  }
+  
+  form .btn-primary:hover {
+    background-color: #007BFD;
+    border-color: #007BFD;
+  }

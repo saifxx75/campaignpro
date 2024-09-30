@@ -1,16 +1,25 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { Container, Row, Col, Form, Button, Alert, Toast } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Form, Button, Toast } from "react-bootstrap";
+import { useNavigate, Navigate } from "react-router-dom";
 import '../Assets/css/Login.css';
-// import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState(null);
   const [message, setMessage] = useState("");
-  const [showToast, setShowToast] = useState(false); // Toast visibility control
-  // const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Add state to track login status
+  const navigate = useNavigate();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const loggedIn = localStorage.getItem('isLoggedIn');
+    if (loggedIn) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,21 +32,31 @@ export default function Login() {
       if (response.status === 200) {
         setMessage("Login successful");
         setLoginError("");
-        setShowToast(true);  // Show toast on success
-        console.log("Login successful");
+        setShowToast(true); // Show toast on success
+        setIsLoggedIn(true); // Mark user as logged in
+        localStorage.setItem('isLoggedIn', true); // Save login state in localStorage
+
+        // Delay navigation to dashboard
+        setTimeout(() => {
+          navigate("/dashboard"); // Redirect to dashboard
+        }, 3000); // 3 seconds delay before navigating
       } else {
         setLoginError(response.data.error || "Login failed");
-        setShowToast(true);  // Show toast on failure
-        console.error("Login failed:", response.data.error);
+        setShowToast(true);
         setMessage("");
       }
     } catch (error) {
       console.error("Login error:", error);
       setLoginError("Incorrect email or password");
       setMessage("");
-      setShowToast(true);  // Show toast on error
+      setShowToast(true);
     }
   };
+
+  // Redirect to dashboard if already logged in
+  // if (isLoggedIn) {
+  //   return <Navigate to="/dashboard" />;
+  // }
 
   return (
     <>
