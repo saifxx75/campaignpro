@@ -2,18 +2,46 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Toast } from "react-bootstrap";
 import { useNavigate, Navigate } from "react-router-dom";
-import '../Assets/css/Login.css';
+import '../../Assets/css/Login.css';
+import {isLogin, setAuthentication} from "../../utils/Auth"
 
-export default function Login() {
+export default function Login({ setisAuthenticated }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState(null);
   const [message, setMessage] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Add state to track login status
   const navigate = useNavigate();
 
-  // Check if user is already logged in
+  useEffect(() => {
+    const authenticate = async () => {
+      if (await isLogin()) {
+        navigate("/dashboard");
+      }
+    };
+    authenticate();
+  }, [navigate]);
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      if (await isLogin()) {
+        setIsAuthenticated(true);
+      }
+    };
+    checkAuthentication();
+  }, []);
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      if (await isLogin()) {
+        setIsAuthenticated(true);
+      }
+    };
+    checkAuthentication();
+  }, []);
+
   useEffect(() => {
     const loggedIn = localStorage.getItem('isLoggedIn');
     if (loggedIn) {

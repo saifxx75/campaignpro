@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidebar from './Sidebar'; // Import Sidebar component
+import Sidebar from './Sidebar/Sidebar'; // Import Sidebar component
 import { Container } from 'react-bootstrap';
 
 const MainLayout = ({ children }) => {

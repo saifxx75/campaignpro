@@ -1,6 +1,6 @@
 import React from "react";
 // import { Link } from "react-router-dom";
-import "../Assets/css/TermOfServices.css";
+import "../../Assets/css/TermOfServices.css";
 
 export default function TermOfServices() {
   return (

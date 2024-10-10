@@ -1,8 +1,8 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import logo from './logowithname.svg';
-import '../Assets/css/Footer.css';
+import logo from '../../Assets/images/logowithname.svg';
+import './Footer.css';
 
 const Footer = () => {
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import '../Assets/css/Contact.css'; // You can add your custom CSS for styling
+import '../../Assets/css/Contact.css'; // You can add your custom CSS for styling
 
 const Contact = () => {
   const [formData, setFormData] = useState({

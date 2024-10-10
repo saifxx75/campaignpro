@@ -1,5 +1,5 @@
 import React from "react";
-import "../Assets/css/Cancellations.css";
+import "../../Assets/css/Cancellations.css";
 export default function () {
   return (
     <>

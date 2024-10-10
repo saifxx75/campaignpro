@@ -7,3 +7,6 @@
     text-decoration: none;
     border: none;
 }
+.profile-icon {
+    cursor: pointer;
+  }
