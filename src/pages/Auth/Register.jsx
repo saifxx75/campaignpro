@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
-import axios from "axios"; // Assuming you're using Axios for API calls
+import axios from "axios";
+import { baseURL } from "../../utils/constant";
 // import { useNavigate } from "react-router-dom";
 
 function Register() {
@@ -15,7 +16,7 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3002/auth/register", {
+      const response = await axios.post(`${baseURL}auth/register`, {
         firstName,
         lastName,
         email,
@@ -35,7 +36,7 @@ function Register() {
     <Container
       fluid
       className="d-flex align-items-center justify-content-center vh-70 mt-4" // Vertically and horizontally center
-      style={{ overflowY: "auto" }} // Ensures scrollability
+      style={{ overflowY: "auto" }} 
     >
       <Row className="justify-content-center w-100">
         <Col md={3} lg={3}>

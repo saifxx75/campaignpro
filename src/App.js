@@ -31,7 +31,8 @@ function App() {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    window.location.href = '/login';  // redirect to login on logout
+    localStorage.removeItem('isLoggedIn'); // Remove the login state from localStorage
+    window.location.href = '/logIn';  // Redirect to login on logout
   };
 
   return (
@@ -49,13 +50,13 @@ function App() {
         <Route path="/register" element={<Register onRegister={handleLogin} />} />
         <Route path="/logIn" element={<Login onLogin={handleLogin} />} />
         <Route path="/terms-of-services" element={<TermOfServices />} />
-        <Route path='/privacy-policy' element={<PrivacyPolicy />} />
-        <Route path='/cancellations' element={<Cancellations />} />
-        <Route path='/support' element={<Support />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/cancellations" element={<Cancellations />} />
+        <Route path="/support" element={<Support />} />
 
         {/* Main Layout: Dashboard */}
         <Route 
-          path='/dashboard' 
+          path="/dashboard" 
           element={isLoggedIn 
             ? <MainLayout><Dashboard /></MainLayout> 
             : <Login onLogin={handleLogin} />} 

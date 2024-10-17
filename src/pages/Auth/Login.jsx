@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Toast } from "react-bootstrap";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import '../../Assets/css/Login.css';
-import {isLogin, setAuthentication} from "../../utils/Auth"
+import { isLogin, setAuthentication } from "../../utils/Auth";
+import { baseURL } from "../../utils/constant";
 
 export default function Login({ setisAuthenticated }) {
   const [email, setEmail] = useState("");
@@ -12,9 +13,10 @@ export default function Login({ setisAuthenticated }) {
   const [message, setMessage] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Add state to track login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
+  // Check if the user is already logged in and redirect to the dashboard if true
   useEffect(() => {
     const authenticate = async () => {
       if (await isLogin()) {
@@ -23,15 +25,6 @@ export default function Login({ setisAuthenticated }) {
     };
     authenticate();
   }, [navigate]);
-
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      if (await isLogin()) {
-        setIsAuthenticated(true);
-      }
-    };
-    checkAuthentication();
-  }, []);
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -52,7 +45,7 @@ export default function Login({ setisAuthenticated }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3002/auth/logIn", {
+      const response = await axios.post(`${baseURL}auth/logIn`, {
         email,
         password,
       });
@@ -60,14 +53,17 @@ export default function Login({ setisAuthenticated }) {
       if (response.status === 200) {
         setMessage("Login successful");
         setLoginError("");
-        setShowToast(true); // Show toast on success
-        setIsLoggedIn(true); // Mark user as logged in
-        localStorage.setItem('isLoggedIn', true); // Save login state in localStorage
+        setShowToast(true);
+        setIsLoggedIn(true);
 
-        // Delay navigation to dashboard
-        setTimeout(() => {
-          navigate("/dashboard"); // Redirect to dashboard
-        }, 3000); // 3 seconds delay before navigating
+        // Save token and set authentication
+        setAuthentication(response.data.bearerToken);
+        localStorage.setItem('isLoggedIn', true);
+        localStorage.setItem('token', response.data.bearerToken);
+
+        // Redirect to the dashboard
+        navigate("/dashboard");
+
       } else {
         setLoginError(response.data.error || "Login failed");
         setShowToast(true);
@@ -80,11 +76,6 @@ export default function Login({ setisAuthenticated }) {
       setShowToast(true);
     }
   };
-
-  // Redirect to dashboard if already logged in
-  // if (isLoggedIn) {
-  //   return <Navigate to="/dashboard" />;
-  // }
 
   return (
     <>

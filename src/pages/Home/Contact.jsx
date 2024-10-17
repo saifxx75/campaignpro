@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import '../../Assets/css/Contact.css'; // You can add your custom CSS for styling
+import emailjs from "emailjs-com";
+import '../../Assets/css/Contact.css';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +9,9 @@ const Contact = () => {
     email: "",
     message: "",
   });
+  
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,15 +20,29 @@ const Contact = () => {
       [name]: value,
     });
   };
-  
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-  //  try {
-  //   const response = await axios.post("http://localhost:3002/user/submitContactForm")
-  //  } catch (error) {
-  //   console.error('Error While Contacting: ', error)
-  //  }
-    console.log(formData);
+
+    // Send formData using EmailJS
+    emailjs.send("service_rvs09jn", "template_z2h6d1m", formData, "YCP92ebmDLdZoV7sk")
+      .then((response) => {
+        console.log('Email successfully sent!', response.status, response.text);
+        setSuccessMessage("Message sent successfully!");
+        setErrorMessage(""); // Clear any previous error message
+        
+        // Clear form fields after successful submission
+        setFormData({
+          name: "",
+          email: "",
+          message: "",
+        });
+      })
+      .catch((error) => {
+        console.error('Error sending email:', error);
+        setErrorMessage("Failed to send message. Please try again.");
+        setSuccessMessage(""); // Clear any previous success message
+      });
   };
 
   return (
@@ -75,6 +93,10 @@ const Contact = () => {
                 required
               />
             </Form.Group>
+
+            {/* Display success or error message */}
+            {successMessage && <p className="text-success mt-3">{successMessage}</p>}
+            {errorMessage && <p className="text-danger mt-3">{errorMessage}</p>}
 
             <div className="d-grid gap-2 mt-4 p-8px align-item-center justify-content-center">
               <Button variant="primary" type="submit">
