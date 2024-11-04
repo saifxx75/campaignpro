@@ -1,112 +1,125 @@
-import React, { useState } from "react";
-import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
-import axios from "axios";
+import axios from 'axios';
 import { baseURL } from "../../utils/constant";
-// import { useNavigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import { Container, Row, Col } from 'react-bootstrap';
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import { isLogin, setAuthentication } from "../../utils/Auth";
+import Toast from 'react-bootstrap/Toast';
 
-function Register() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  // const navigate = useNavigate();
+export default function RegisterPage() {
+  const [showToast, setShowToast] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    companyName: '',
+    jobTitle: '',
+    email: '',
+    password: ''
+  });
+  const [pageReady, setPageReady] = useState(false);
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(`${baseURL}auth/register`, {
-        firstName,
-        lastName,
-        email,
-        password,
-      });
-      setMessage(response.data.message || "Registration successful!");
-      setError("");
-    } catch (err) {
-      setError(
-        err.response?.data?.message || "An error occurred during registration."
-      );
-      setMessage("");
-    }
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const authenticate = async () => {
+      if (await isLogin()) {
+        navigate("/");
+      } else {
+        setPageReady(true);
+      }
+    };
+    authenticate();
+  }, [navigate]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.post(`${baseURL}auth/register`, formData)
+      .then((res) => {
+        setAuthentication(res.data.bearerToken);
+        localStorage.setItem('bearerToken', res.data.bearerToken);
+        setToastMessage("Registration successful! Redirecting...");
+        setShowSuccessToast(true);
+        setTimeout(() => navigate("/register/verify"), 2000);
+      })
+      .catch((err) => {
+        setToastMessage(err?.response?.data?.message || "An error occurred");
+        setShowToast(true);
+      });
+  };
+
+  if (!pageReady) return null;
+
   return (
-    <Container
-      fluid
-      className="d-flex align-items-center justify-content-center vh-70 mt-4" // Vertically and horizontally center
-      style={{ overflowY: "auto" }} 
-    >
-      <Row className="justify-content-center w-100">
-        <Col md={3} lg={3}>
-        {/* <Button
-            variant="secondary"
-            className="mb-3"
-            style={{ position: 'absolute', top: '10px', left: '10px' }} // Positioning in top-left corner
-            onClick={() => navigate("/")}
-          >
-            Back
-          </Button> */}
-          <Form className="p-4 shadow-sm rounded" onSubmit={handleRegister}>
-            <h2 className="text-center mb-4">Create Your Free Account</h2>
-            {error && <Alert variant="danger">{error}</Alert>}
-            {message && <Alert variant="success">{message}</Alert>}
-            <Form.Group controlId="formFirstName">
-              <Form.Label>First Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter First Name"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group controlId="formLastName">
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Last Name"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId="formEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group controlId="formPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <div className="d-grid gap-2 mt-4">
-              <Button variant="primary" type="submit">
-                Sign Up
-              </Button>
-            </div>
-          </Form>
-          <div className="text-center mt-3">
-            <p>OR</p>
-            <p>
-              Already registered? <a className="text-decoration-none" href="/logIn">Sign In</a>
-            </p>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <Container>
+          <Row>
+            <Col lg={4} className="mx-auto">
+              <Col lg={12} className="p-5 border rounded-4 mb-3">
+                <h5 className="mb-5 text-center">Create Account</h5>
+                <Form onSubmit={handleSubmit}>
+                  {["firstName", "lastName", "companyName", "jobTitle", "email", "password"].map((field, index) => (
+                    <Form.Group className="mb-3" key={index}>
+                      <Form.Control
+                        type={field === "email" ? "email" : field === "password" ? "password" : "text"}
+                        placeholder={field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}
+                        className="border-0 border-bottom rounded-0"
+                        name={field}
+                        onChange={handleChange}
+                      />
+                    </Form.Group>
+                  ))}
+                  <div className="d-grid gap-2">
+                    <Button variant="primary" type="submit" className="rounded-pill">
+                      Register
+                    </Button>
+                  </div>
+                </Form>
+              </Col>
+              <div className="text-center">
+                <Link to="/" className="text-decoration-none">Back to Home Page</Link>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+
+      <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        className="custom-toast p-2 border-0 bg-danger text-white"
+      >
+        <Toast.Body>{toastMessage}</Toast.Body>
+      </Toast>
+
+      <Toast
+        show={showSuccessToast}
+        onClose={() => setShowSuccessToast(false)}
+        className="custom-toast p-2 border-0 bg-success text-white"
+      >
+        <Toast.Body>{toastMessage}</Toast.Body>
+      </Toast>
+
+      <style jsx global>{`
+        .custom-toast {
+          position: fixed;
+          bottom: 20px;
+          left: 20px;
+          z-index: 9999;
+        }
+      `}</style>
+    </>
   );
 }
-
-export default Register;

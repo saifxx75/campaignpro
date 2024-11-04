@@ -1,22 +1,21 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Toast } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import '../../Assets/css/Login.css';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axios from "axios";
 import { isLogin, setAuthentication } from "../../utils/Auth";
 import { baseURL } from "../../utils/constant";
+import "../../Assets/css/Login.css";
 
 export default function Login({ setisAuthenticated }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [loginError, setLoginError] = useState(null);
   const [message, setMessage] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  // Check if the user is already logged in and redirect to the dashboard if true
   useEffect(() => {
     const authenticate = async () => {
       if (await isLogin()) {
@@ -26,21 +25,9 @@ export default function Login({ setisAuthenticated }) {
     authenticate();
   }, [navigate]);
 
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      if (await isLogin()) {
-        setIsAuthenticated(true);
-      }
-    };
-    checkAuthentication();
-  }, []);
-
-  useEffect(() => {
-    const loggedIn = localStorage.getItem('isLoggedIn');
-    if (loggedIn) {
-      setIsLoggedIn(true);
-    }
-  }, []);
+  const handlePasswordToggle = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -52,25 +39,19 @@ export default function Login({ setisAuthenticated }) {
 
       if (response.status === 200) {
         setMessage("Login successful");
-        setLoginError("");
+        setLoginError(null);
         setShowToast(true);
-        setIsLoggedIn(true);
 
-        // Save token and set authentication
         setAuthentication(response.data.bearerToken);
-        localStorage.setItem('isLoggedIn', true);
-        localStorage.setItem('token', response.data.bearerToken);
+        localStorage.setItem("token", response.data.bearerToken);
 
-        // Redirect to the dashboard
         navigate("/dashboard");
-
       } else {
         setLoginError(response.data.error || "Login failed");
         setShowToast(true);
         setMessage("");
       }
     } catch (error) {
-      console.error("Login error:", error);
       setLoginError("Incorrect email or password");
       setMessage("");
       setShowToast(true);
@@ -81,15 +62,24 @@ export default function Login({ setisAuthenticated }) {
     <>
       {/* Toast for showing messages */}
       <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 1060 }}>
-        <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+        <Toast
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          delay={3000}
+          autohide
+        >
           <Toast.Body>
-            {loginError ? <span className="error">{loginError}</span> : <span className="success">{message}</span>}
+            {loginError ? (
+              <span className="error">{loginError}</span>
+            ) : (
+              <span className="success">{message}</span>
+            )}
           </Toast.Body>
         </Toast>
       </div>
 
       {/* Main login form */}
-      <Container className="mt-5 mb-5 p-3 space-y-6 container-fluid justify-content-center align-item-center">
+      <Container className="mt-5 mb-5 p-3 justify-content-center align-item-center">
         <Row className="d-flex justify-content-center">
           <Col md={4}>
             <Form className="rounded-md shadow-sm p-4" onSubmit={handleLogin}>
@@ -100,23 +90,32 @@ export default function Login({ setisAuthenticated }) {
                 <Form.Control
                   type="email"
                   placeholder="Enter Email"
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="form-control"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </Form.Group>
 
-              <Form.Group controlId="formPassword" className="mt-3">
+              <Form.Group controlId="formPassword" className="mt-3 position-relative">
                 <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Enter Password"
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                <div className="position-relative">
+                  <Form.Control
+                    type={passwordVisible ? "text" : "password"}
+                    placeholder="Enter Password"
+                    className="form-control"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="position-absolute end-0 top-50 translate-middle-y me-2 border-0 bg-transparent"
+                    onClick={handlePasswordToggle}
+                  >
+                    {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
               </Form.Group>
 
               <div className="d-grid gap-2 mt-4">
@@ -127,7 +126,10 @@ export default function Login({ setisAuthenticated }) {
             </Form>
             <p className="text-center mt-4">OR</p>
             <p className="text-center">
-              Don&apos;t have an account? <a className="text-decoration-none" href="/register">Sign Up</a>
+              Don&apos;t have an account?{" "}
+              <a className="text-decoration-none" href="/register">
+                Sign Up
+              </a>
             </p>
           </Col>
         </Row>

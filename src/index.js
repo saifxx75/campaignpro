@@ -1,20 +1,75 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
-import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.js'
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom/client";
+import {
+  Route,
+  BrowserRouter,
+  Routes,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+import Home from "./pages/Home/Home";
+import About from "./pages/Home/About";
+import Contact from "./pages/Home/Contact";
+import PrivacyPolicy from './pages/Home/PrivacyPolicy';
+import Cancellations from './pages/Home/Cancellations';
+import Support from './pages/Home/Support';
+import Register from "./pages/Auth/Register";
+import Login from "./pages/Auth/Login";
+import Footer from "./components/Footer/Footer";
+import TermOfServices from "./pages/Home/TermOfServices";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import App from "./App";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.js";
+import Header from "./components/Header/Header";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <BrowserRouter>
-    <App  className="justify-content-start"/>
-  </BrowserRouter>,
+const PrivateRoute = ({ isAuthenticated, ...props }) => {
+  const token = localStorage.getItem("token");
+  return isAuthenticated && token ? <Outlet /> : <Navigate replace to="/" />;
+};
+
+const AppRoutes = () => {
+  const [isAuthenticated, setisAuthenticated] = useState(() => {
+    const token = localStorage.getItem("token");
+    return !!token;
+  });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setisAuthenticated(!!token);
+  }, []);
+
+  return (
+    <BrowserRouter>
+    <Header />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route
+          path="/logIn"
+          element={<Login setisAuthenticated={setisAuthenticated} />}
+        />
+        <Route
+          path="/register"
+          element={<Register setisAuthenticated={setisAuthenticated} />}
+        />
+        <Route path="/terms-of-services" element={<TermOfServices />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/cancellations" element={<Cancellations />} />
+        <Route path="/support" element={<Support />} />
+      </Routes>
+      <Footer />
+    </BrowserRouter>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.Fragment>
+    <AppRoutes />
+  </React.Fragment>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
