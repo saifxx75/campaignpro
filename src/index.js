@@ -25,6 +25,7 @@ import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.js";
 import Header from "./components/Header/Header";
+import Sidebar from "./components/Sidebar/Sidebar";
 
 const PrivateRoute = ({ isAuthenticated, ...props }) => {
   const token = localStorage.getItem("token");
@@ -62,6 +63,8 @@ const AppRoutes = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/cancellations" element={<Cancellations />} />
         <Route path="/support" element={<Support />} />
+        <Route path="/dashboard" element={<Dashboard  isAuthenticated={isAuthenticated}/>} />
+        <Route path="/sidebar" element={<Sidebar/>} />
       </Routes>
       <Footer />
     </BrowserRouter>

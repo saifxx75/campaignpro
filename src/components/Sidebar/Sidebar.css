@@ -1,0 +1,15 @@
+.sidebar {
+    background-color: #f8f9fa; /* Light background for the sidebar */
+    width: 250px;
+  }
+  
+  .sidebar .list-group-item {
+    color: #333;
+    transition: background-color 0.3s;
+  }
+  
+  .sidebar .list-group-item.active {
+    background-color: #13395e; /* Active background color */
+    color: #b6c8d9; /* Active text color */
+  }
+  
