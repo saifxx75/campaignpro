@@ -17,7 +17,7 @@ const Home = () => {
               quality control.<br></br> Manage, monitor, and maximize your impact for
               guaranteed success!
             </p>
-            <Link to="/register" className="signup-btn">
+            <Link to="/register" className="signup-btn text-decoration-none">
               Get Started
             </Link>
           </div>

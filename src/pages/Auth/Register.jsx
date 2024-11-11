@@ -15,8 +15,6 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    companyName: '',
-    jobTitle: '',
     email: '',
     password: ''
   });
@@ -49,13 +47,14 @@ export default function RegisterPage() {
       .then((res) => {
         setAuthentication(res.data.bearerToken);
         localStorage.setItem('bearerToken', res.data.bearerToken);
-        setToastMessage("Registration successful! Redirecting...");
+        setToastMessage("Registration successful!");
         setShowSuccessToast(true);
-        setTimeout(() => navigate("/register/verify"), 2000);
+        setTimeout(() => navigate("/dashboard"), 2000);
       })
       .catch((err) => {
         setToastMessage(err?.response?.data?.message || "An error occurred");
         setShowToast(true);
+        setTimeout(() => setShowToast(false), 5000);
       });
   };
 
@@ -70,7 +69,7 @@ export default function RegisterPage() {
               <Col lg={12} className="p-5 border rounded-4 mb-3">
                 <h5 className="mb-5 text-center">Create Account</h5>
                 <Form onSubmit={handleSubmit}>
-                  {["firstName", "lastName", "companyName", "jobTitle", "email", "password"].map((field, index) => (
+                  {["firstName", "lastName", "email", "password"].map((field, index) => (
                     <Form.Group className="mb-3" key={index}>
                       <Form.Control
                         type={field === "email" ? "email" : field === "password" ? "password" : "text"}

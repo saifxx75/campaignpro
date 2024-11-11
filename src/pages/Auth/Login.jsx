@@ -32,31 +32,37 @@ export default function Login({ setisAuthenticated }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${baseURL}auth/logIn`, {
-        email,
-        password,
-      });
-
-      if (response.status === 200) {
+      const response = await axios.post(`${baseURL}auth/login`, { email, password });
+  
+      // Ensure correct response status and bearerToken
+      if (response.status === 200 && response.data.bearerToken) {
         setMessage("Login successful");
         setLoginError(null);
         setShowToast(true);
-
+  
         setAuthentication(response.data.bearerToken);
         localStorage.setItem("token", response.data.bearerToken);
-
+  
+        setisAuthenticated(true);
         navigate("/dashboard");
       } else {
-        setLoginError(response.data.error || "Login failed");
+        setLoginError("Login failed, please check your credentials.");
+        setMessage("Login failed");
         setShowToast(true);
-        setMessage("");
       }
     } catch (error) {
-      setLoginError("Incorrect email or password");
-      setMessage("");
+      if (error.response) {
+        console.error("Login error response:", error.response); // To see more details
+        setLoginError(error.response.data.message || "Incorrect email or password");
+      } else {
+        setLoginError("Network error. Please try again.");
+      }
+      setMessage("Incorrect email or password");
       setShowToast(true);
     }
   };
+  
+  
 
   return (
     <>
@@ -65,7 +71,7 @@ export default function Login({ setisAuthenticated }) {
         <Toast
           onClose={() => setShowToast(false)}
           show={showToast}
-          delay={3000}
+          delay={5000}
           autohide
         >
           <Toast.Body>
